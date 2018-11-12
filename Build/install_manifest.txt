@@ -1,0 +1,2 @@
+/home/cellman123/Desktop/Kernel/Binaries/Examples/Basic
+/home/cellman123/Desktop/Kernel/Binaries/Examples/mHelloModule.so

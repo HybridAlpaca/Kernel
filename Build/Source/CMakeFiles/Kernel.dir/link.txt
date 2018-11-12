@@ -1,0 +1,2 @@
+/usr/bin/ar qc libKernel.a  CMakeFiles/Kernel.dir/Kernel/SharedLib.cpp.o
+/usr/bin/ranlib libKernel.a
