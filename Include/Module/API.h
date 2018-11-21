@@ -5,24 +5,16 @@
 struct ModuleDesc
 {
 	cchar name;
+	cchar author;
 
 	struct {
 		uint32 major;
 		uint32 minor;
 		uint32 patch;
 	} version;
+
+	/// @todo Dependancies
+	/// @todo Extensions
 };
 
-struct SystemServices
-{
-	struct {
-		uint32 major;
-		uint32 minor;
-		uint32 patch;
-	} version;
-
-	void (* RegisterModule)(const ModuleDesc *);
-};
-
-using LoadProc = void(const SystemServices *);
-using UnloadProc = void();
+using ModuleRegisterProc = void (ModuleDesc *);

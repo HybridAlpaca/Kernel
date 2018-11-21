@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/Basic.dir/00-Basic/Main.cpp.o  -o Basic ../Source/libKernel.a -ldl 

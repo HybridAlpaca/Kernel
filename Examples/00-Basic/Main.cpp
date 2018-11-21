@@ -1,33 +1,17 @@
 #include <Subframe/Subframe.h>
-#include <Kernel/SharedLib.h>
-#include <Module/API.h>
+#include <Kernel/ModuleController.h>
 
-#include <iostream>
-
-void Register(const ModuleDesc * desc)
-{
-	std::cout << "[Kernel] :: Load :: " << desc -> name
-		<< " v." << desc -> version.major
-		<< "." << desc -> version.minor
-		<< "." << desc -> version.patch
-		<< '\n';
-}
+#include <HelloStatic.h>
 
 int32 main(int32 argc, char ** argv)
 {
-	Kernel::SharedLib lib("/home/cellman123/Desktop/Kernel/Binaries/Examples/mHelloModule.so");
+	// Initialize the kernel environment
 
-	LoadProc * Load = (LoadProc *) lib.ProcAddress("Load");
-	UnloadProc * Unload = (UnloadProc *) lib.ProcAddress("Unload");
+	Kernel::ModuleController controller{};
 
-	SystemServices services;
-	services.version.major = 0;
-	services.version.minor = 0;
-	services.version.patch = 1;
-	services.RegisterModule = Register;
+	// Load modules
 
-	Load(& services);
-	Unload();
+	Kernel::Handle helloStatic = controller.RegisterModule(RegisterHelloStatic);
 
 	return 0;
 }
