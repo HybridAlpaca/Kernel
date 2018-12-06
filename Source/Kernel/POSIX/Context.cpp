@@ -159,6 +159,7 @@ void GraphicsContext::Create(uint32 width, uint32 height)
 	glewExperimental = true;
 	glewInit();
 
+	glEnable(GL_DEPTH_TEST);
 	glViewport(0, 0, width, height);
 }
 

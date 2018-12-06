@@ -107,22 +107,29 @@ bool Kernel::WindowOpen()
 void Kernel::ProcessWindowEvents()
 {
 	XEvent event;
-	XNextEvent(display, & event);
 
-	switch(event.type)
+	// While there are still events in the display's queue
+	while (XPending(display) > 0)
 	{
-		case ClientMessage:
-			if (static_cast<Atom>(event.xclient.data.l[0]) == wmDeleteWindow)
-			{
-				running = false;
-			}
-			break;
-		case KeyPress:
-			if (event.xkey.keycode == 0x09) // escape
-			{
-				running = false;
-			}
-			break;
+		XNextEvent(display, & event);
+
+		switch(event.type)
+		{
+			case ClientMessage:
+				// [x] button pressed
+				if (static_cast<Atom>(event.xclient.data.l[0]) == wmDeleteWindow)
+				{
+					running = false;
+				}
+				break;
+			case KeyPress:
+				// Escape key
+				if (event.xkey.keycode == 0x09)
+				{
+					running = false;
+				}
+				break;
+		}
 	}
 }
 
@@ -132,6 +139,6 @@ void Kernel::DestroyWindow()
 	XCloseIM(im);
 
 	// Remove and destroy our window
-	XUnmapWindow(display, window);
-	XDestroyWindow(display, window);
+	XUnmapWindow   (display, window);
+	XDestroyWindow (display, window);
 }
