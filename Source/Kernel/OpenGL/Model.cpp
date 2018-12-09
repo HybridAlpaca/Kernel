@@ -1,5 +1,5 @@
 #include <Kernel/Model.h>
-#include <Subframe/Subframe.h>
+#include <Kernel/Debug.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <External/STB/stb_image.h>
@@ -41,7 +41,8 @@ void Model::LoadModel(const std::string & path)
 
 		if (sceneNonexistent || sceneIncomplete || sceneMissingRoot)
 		{
-			std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
+			Kernel::DebugLog("[Error] Could not load model:");
+			Kernel::DebugLog(importer.GetErrorString());
 			return;
 		}
 	}
@@ -71,14 +72,15 @@ void Model::ProcessNode(aiNode * node, const aiScene * scene)
 	}
 }
 
-void Model::Draw(const Shader & shader)
+void Model::Draw(uint32 program)
 {
-	// Set our model space matrix
-	shader.setMat4("model", transform);
+	Kernel::DebugCPUBegin("ModelDraw");
 
 	// Render each mesh in progression
 	for (uint32 i = 0; i < meshes.size(); ++i)
 	{
+		Kernel::DebugCPUBegin("MeshDraw");
+
 		const Mesh & mesh = meshes[i];
 
 		uint32 diffuseCount  = 1;
@@ -115,7 +117,7 @@ void Model::Draw(const Shader & shader)
 			}
 
 			// Set the sampler to the correct texture unit
-			glUniform1i(glGetUniformLocation(shader.ID, name.c_str()), j);
+			glUniform1i(glGetUniformLocation(program, name.c_str()), j);
 
 			// Bind the texture
 			glBindTexture(GL_TEXTURE_2D, mesh.textures[j].id);
@@ -125,10 +127,10 @@ void Model::Draw(const Shader & shader)
 		glBindVertexArray(mesh.VAO);
 		glDrawElements(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, 0);
 
-		// Always good practice to reset everything to defaults (in the future, we won't do this)
-		glActiveTexture(GL_TEXTURE0);
-		glBindVertexArray(0);
+		Kernel::DebugCPUEnd();
 	}
+
+	Kernel::DebugCPUEnd();
 }
 
 Mesh Model::ProcessMesh(aiMesh * mesh, const aiScene * scene)
@@ -353,7 +355,8 @@ uint32 TextureFromFile(cchar path, const std::string & directory, bool gamma)
 	else
 	{
 		// Image loading failed
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		Kernel::DebugLog("[Error] Model texture failed to load at path:");
+		Kernel::DebugLog(path);
 	}
 
 	// Clean up our resources

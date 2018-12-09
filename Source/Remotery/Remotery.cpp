@@ -47,7 +47,7 @@
 */
 
 #define RMT_IMPL
-#include "Kernel/Remotery.h"
+#include <External/Remotery/Remotery.h>
 
 
 #ifdef RMT_PLATFORM_WINDOWS
@@ -5571,7 +5571,7 @@ RMT_API void _rmt_BeginCUDASample(rmtPStr name, rmtU32* hash_cache, void* stream
     if (g_Remotery == NULL)
         return;
 
-    if (Remotery_GetThreadSampler(g_Remotery, & ts) == RMT_ERROR_NONE)
+    if (Remotery_GetThreadSampler(g_Remotery, &ts) == RMT_ERROR_NONE)
     {
         rmtError error;
         Sample* sample;

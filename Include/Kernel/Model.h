@@ -4,7 +4,7 @@
 
 #include <assimp/material.h>
 
-#include "Shader.hpp"
+#include "Shader.h"
 #include "Mesh.h"
 
 #include <string>
@@ -68,16 +68,16 @@ public:
 	Model(const std::string & path, bool gamma = false);
 
 	Model(const Model &) = delete; ///< Noncopyable
-	Model(Model &&)      = delete; ///< Noncopyable
+	Model(Model &&)      = delete; ///< Nonmovable
 
 	/// Gracefully cleans up model assets & GPU resources
 	/// @note Blocks calling thread until all assets are destroyed on GPU
 	~Model();
 
 	Model & operator=(const Model &) = delete; ///< Noncopyable
-	Model & operator=(Model &&)      = delete; ///< Noncopyable
+	Model & operator=(Model &&)      = delete; ///< Nonmovable
 
 	/// Submits this model for rendering on the GPU
-	/// @param [in] Shader	The shader to be used during drawing
-	void Draw(const Shader & shader);
+	/// @param [in] handle	Handle to program object to draw with
+	void Draw(uint32 handle);
 };

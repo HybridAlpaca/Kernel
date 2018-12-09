@@ -50,10 +50,6 @@ void GraphicsContext::Create(uint32 width, uint32 height)
 		// Lock the X client for threading purposes
 		XLockDisplay(display);
 
-		// Query GLX version
-		int32 major, minor;
-		bool version = glXQueryVersion(display, & major, & minor);
-
 		const int attrsGlx []
 		{
 			GLX_RENDER_TYPE,    GLX_RGBA_BIT,
@@ -76,7 +72,7 @@ void GraphicsContext::Create(uint32 width, uint32 height)
 		GLXFBConfig * configs = glXChooseFBConfig(display, screen, attrsGlx, & configCount);
 
 		// Choose the best FB
-		for (uint32 i = 0; i < configCount; ++i)
+		for (int32 i = 0; i < configCount; ++i)
 		{
 			// Get visual info for this FB configuration
 			driver -> visualInfo = glXGetVisualFromFBConfig(display, configs[i]);

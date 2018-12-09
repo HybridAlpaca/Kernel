@@ -18,7 +18,6 @@ namespace
 
 	Atom wmDeleteWindow;
 	XIM	im;
-	XIC ic;
 
 	cchar applicationName  = "${title}";
 	cchar applicationClass = "HybridAlpaca_Kernel";
