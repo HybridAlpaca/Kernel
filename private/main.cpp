@@ -9,7 +9,7 @@ static bool running{true};
 
 static std::string root_dir{};
 
-kernel_api kernel
+kernel_i kernel
 {
 	api_impl_add,
 	api_impl_first,
@@ -33,7 +33,7 @@ int main(int argc, char ** argv)
 
 	load_modules_dir(lib_dir.c_str());
 
-	module_t ** modules;
+	module_desc_t ** modules;
 
 	uint16_t module_count = get_loaded_modules(&modules);
 

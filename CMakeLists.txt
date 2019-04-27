@@ -17,16 +17,16 @@ add_executable (${MODULE_NAME})
 
 target_sources (${MODULE_NAME}
 PRIVATE
-	"source/main.cpp"
-	"source/module-registry.cpp"
-	"source/api-registry.cpp"
+	"private/main.cpp"
+	"private/module-registry.cpp"
+	"private/api-registry.cpp"
 
-	"source/posix/module-loader.cpp"
+	"private/posix/module-loader.cpp"
 )
 
 target_include_directories (${MODULE_NAME}
 PUBLIC
-	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/public>"
 	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
@@ -40,7 +40,7 @@ set_target_properties (${MODULE_NAME}
 PROPERTIES
 	CXX_STANDARD 17
 	CXX_EXTENSIONS OFF
-	PUBLIC_HEADER "include/${MODULE_NAME}.h"
+	PUBLIC_HEADER "public/${MODULE_NAME}.h"
 )
 
 install (

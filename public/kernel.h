@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 
-struct kernel_api;
+struct kernel_i;
 
-struct module_t
+struct module_desc_t
 {
 	const char * id;
 
@@ -14,12 +14,12 @@ struct module_t
 	uint16_t export_count;
 	uint16_t import_count;
 
-	bool (*start)(kernel_api * kernel);
+	bool (*start)(kernel_i * kernel);
 	bool (*stop)();
 	bool (*update)();
 };
 
-struct kernel_api
+struct kernel_i
 {
 	void (*api_impl_add)(const char * name, void * impl);
 

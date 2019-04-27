@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-struct module_t;
+struct module_desc_t;
 
 // API registry
 
@@ -18,11 +18,11 @@ void load_modules_dir(const char * path);
 
 void unload_modules();
 
-uint16_t get_loaded_modules(module_t *** modules);
+uint16_t get_loaded_modules(module_desc_t *** modules);
 
 // Modules (@todo merge)
 
-void registry_add_module(const module_t * module);
+void registry_add_module(const module_desc_t * module);
 
 void registry_start_modules();
 

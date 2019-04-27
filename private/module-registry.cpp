@@ -8,7 +8,7 @@
 #include <set>
 #include <vector>
 
-extern kernel_api kernel;
+extern kernel_i kernel;
 
 struct char_hash_t
 {
@@ -20,21 +20,21 @@ struct char_hash_t
 
 struct module_registry_o
 {
-	std::set<const module_t *> module_cache;
+	std::set<const module_desc_t *> module_cache;
 
-	std::vector<const module_t *> module_queue;
+	std::vector<const module_desc_t *> module_queue;
 
 	std::set<const char *, char_hash_t> apis_exported;
 };
 
 static module_registry_o state;
 
-void registry_add_module(const module_t * mod)
+void registry_add_module(const module_desc_t * mod)
 {
 	state.module_cache.insert(mod);
 }
 
-bool recurse_module_cache(const module_t * mod)
+bool recurse_module_cache(const module_desc_t * mod)
 {
 	// If any one of our imported API's has not yet been exported,
 	// abort immediately

@@ -8,7 +8,7 @@
 struct module_loader_o
 {
 	std::vector<void *> handles;
-	std::vector<module_t *> modules;
+	std::vector<module_desc_t *> modules;
 };
 
 static module_loader_o state;
@@ -27,7 +27,7 @@ void load_modules_dir(const char * path)
 			std::cout << dlerror() << std::endl;
 		}
 
-		module_t * module = static_cast<module_t *>(dlsym(handle, "module"));
+		auto module = static_cast<module_desc_t *>(dlsym(handle, "module"));
 
 		state.handles.push_back(handle);
 		state.modules.push_back(module);
@@ -42,7 +42,7 @@ void unload_modules()
 	}
 }
 
-uint16_t get_loaded_modules(module_t *** modules)
+uint16_t get_loaded_modules(module_desc_t *** modules)
 {
 	(*modules) = state.modules.data();
 
