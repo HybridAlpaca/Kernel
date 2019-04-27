@@ -1,54 +1,57 @@
 #include <kernel.h>
-#include "registry-impl.h"
+#include "state.h"
 
+#include <filesystem>
 #include <iostream>
+#include <string>
 
-static api_desc_t foo
+static bool running{true};
+
+static std::string root_dir{};
+
+kernel_api kernel
 {
-	0,
-	nullptr,
-
-	nullptr,
-	[](registry_api * registry){ std::cout << "Starting foo" << std::endl; },
-	[](registry_api * registry){ std::cout << "Stopping foo" << std::endl; },
-	[](registry_api * registry){ std::cout << "Updating foo" << std::endl; }
+	api_impl_add,
+	api_impl_first,
+	api_impl_next,
+	[](){ running = false; },
+	[](){ return root_dir.c_str(); }
 };
 
-static const char * bar_deps[]{ "foo", "baz" };
-static api_desc_t bar
+int main(int argc, char ** argv)
 {
-	2,
-	bar_deps,
+	const std::string exe_path{std::filesystem::weakly_canonical(argv[0])};
 
-	nullptr,
-	[](registry_api * registry){ std::cout << "Starting bar" << std::endl; },
-	[](registry_api * registry){ std::cout << "Stopping bar" << std::endl; },
-	[](registry_api * registry){ std::cout << "Updating bar" << std::endl; }
-};
+	unsigned int slash_pos = exe_path.rfind('/');
 
-static const char * baz_deps[]{ "foo" };
-static api_desc_t baz
-{
-	1,
-	baz_deps,
+	// Get absolute path to lib dir.  This assumes a 64 bit system.
+	// @todo Get this information from CMake?
 
-	nullptr,
-	[](registry_api * registry){ std::cout << "Starting baz" << std::endl; },
-	[](registry_api * registry){ std::cout << "Stopping baz" << std::endl; },
-	[](registry_api * registry){ std::cout << "Updating baz" << std::endl; }
-};
+	root_dir = exe_path.substr(0, slash_pos + 1) + "../";
 
-int main()
-{
-	registry_api * registry = get_registry();
+	const auto lib_dir = root_dir + "lib64";
 
-	registry->add_api("bar", &bar);
-	registry->add_api("baz", &baz);
-	registry->add_api("foo", &foo);
+	load_modules_dir(lib_dir.c_str());
 
-	registry->update_all();
+	module_t ** modules;
 
-	registry->stop_all();
+	uint16_t module_count = get_loaded_modules(&modules);
+
+	for (uint16_t i{0}; i < module_count; ++i)
+	{
+		registry_add_module(modules[i]);
+	}
+
+	registry_start_modules();
+
+	while (running)
+	{
+		registry_execute_modules();
+	}
+
+	registry_stop_modules();
+
+	unload_modules();
 
 	return 0;
 }

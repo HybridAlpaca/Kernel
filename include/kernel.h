@@ -2,29 +2,32 @@
 
 #include <stdint.h>
 
-struct registry_api;
+struct kernel_api;
 
-struct api_desc_t
+struct module_t
 {
-	uint16_t dep_count;
-	const char * const * deps;
+	const char * id;
 
-	void * api;
+	const char * const * exports;
+	const char * const * imports;
 
-	void (*start)(registry_api * registry);
-	void (*stop)(registry_api * registry);
-	void (*update)(registry_api * registry);
+	uint16_t export_count;
+	uint16_t import_count;
+
+	bool (*start)(kernel_api * kernel);
+	bool (*stop)();
+	bool (*update)();
 };
 
-struct registry_api
+struct kernel_api
 {
-	void (*add_api)(const char * name, const api_desc_t * desc);
+	void (*api_impl_add)(const char * name, void * impl);
 
-	void * (*get_api)(const char * name);
+	void * (*api_impl_first)(const char * name);
 
-	void (*remove_api)(const char * name);
+	void * (*api_impl_next)(const char * name, void * prev);
 
-	void (*update_all)();
+	void (*shutdown)();
 
-	void (*stop_all)();
+	const char * (*get_root_dir)();
 };
