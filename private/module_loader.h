@@ -17,7 +17,8 @@
 /**
  * @brief Loads provided file paths into memory as modules
  *
- * @param file_names Array of absolute paths to modules which should be loaded
+ * @param file_paths Array to file paths which should be loaded
+ * @param file_count Number of paths contained within file_paths
  *
  * @return const char * Error message produced during loading process, if any
  */
