@@ -17,11 +17,7 @@ add_executable (${MODULE_NAME})
 
 target_sources (${MODULE_NAME}
 PRIVATE
-	"private/main.cpp"
-	"private/module-registry.cpp"
-	"private/api-registry.cpp"
-
-	"private/posix/module-loader.cpp"
+	"private/posix/module_loader.cpp"
 )
 
 target_include_directories (${MODULE_NAME}

@@ -1,0 +1,9 @@
+# ide files
+
+.vs/
+.vscode/
+
+# temporaries
+
+build/
+dist/
