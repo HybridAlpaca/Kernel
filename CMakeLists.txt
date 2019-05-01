@@ -15,9 +15,18 @@ endif ()
 
 add_executable (${MODULE_NAME})
 
+if (UNIX AND NOT APPLE)
+	set (PLATFORM_SOURCES "private/posix/module_loader.cpp")
+	set (PLATFORM_LIBRARIES "dl" "stdc++fs")
+elseif (WINDOWS)
+	set (PLATFORM_SOURCES "private/win64/module_loader.cpp")
+else ()
+	message ("Sorry buster, Mac isn't supported.")
+endif ()
+
 target_sources (${MODULE_NAME}
 PRIVATE
-	"private/posix/module_loader.cpp"
+	${PLATFORM_SOURCES}
 )
 
 target_include_directories (${MODULE_NAME}
@@ -28,8 +37,7 @@ PUBLIC
 
 target_link_libraries (${MODULE_NAME}
 PRIVATE
-	dl
-	stdc++fs
+	${PLATFORM_LIBRARIES}
 )
 
 set_target_properties (${MODULE_NAME}
