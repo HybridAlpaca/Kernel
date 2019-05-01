@@ -45,7 +45,7 @@ set_target_properties (${MODULE_NAME}
 PROPERTIES
 	CXX_STANDARD 17
 	CXX_EXTENSIONS OFF
-	# PUBLIC_HEADER "public/${MODULE_NAME}.h"
+	PUBLIC_HEADER "public/${MODULE_NAME}.h"
 )
 
 install (
