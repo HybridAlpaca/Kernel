@@ -1,3 +1,15 @@
+/**
+ * @file module_loader.cpp
+ * @author StickyFingies
+ *
+ * @brief POSIX implementation of the kernel's module loading interface
+ *
+ * @version 0.0.1
+ * @date 2019-05-01
+ *
+ * @copyright Copyright (c) 2019
+ */
+
 #include "../module_loader.h"
 
 #include <dlfcn.h>
@@ -7,7 +19,7 @@
 /**
  * @struct module_loader_o
  *
- * @brief All global state needed to be kept by the POSIX module loaded implementation
+ * @brief All internal state needed to be kept by the POSIX module loaded implementation
  */
 struct module_loader_o
 {
@@ -15,13 +27,13 @@ struct module_loader_o
 	std::vector<void *> dll_handles;
 };
 
-static module_loader_o state{};
+static module_loader_o internal{};
 
 const char * module_load_files(const char ** file_paths, uint16_t file_count)
 {
 	// Grow list to fit files (optimization)
 
-	state.dll_handles.reserve(file_count);
+	internal.dll_handles.reserve(file_count);
 
 	// Load all provided modules
 
@@ -44,15 +56,19 @@ const char * module_load_files(const char ** file_paths, uint16_t file_count)
 
 		// Add module to list
 
-		state.dll_handles.push_back(handle);
+		internal.dll_handles.push_back(handle);
 	}
+
+	// No errors :)
+
+	return nullptr;
 }
 
 void module_unload_all()
 {
 	// Close every loaded module
 
-	for (const auto & handle : state.dll_handles)
+	for (const auto & handle : internal.dll_handles)
 	{
 		dlclose(handle);
 	}

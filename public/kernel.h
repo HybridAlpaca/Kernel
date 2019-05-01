@@ -12,8 +12,12 @@
 
 #pragma once
 
+#include <stdint.h>
+
 /**
  * @struct loaf_kernel_api
+ *
+ * @brief Functions necessary to communicate with Loaf's kernel.  This interface will be available the whole codebase, including other modules.
  */
 struct loaf_kernel_i
 {
@@ -36,7 +40,7 @@ struct loaf_kernel_i
 	 *
 	 * @return void * Implementation of the interface to be retrieved
 	 *
-	 * @warning Retrieving interface which is not in registry is UB.  Query its existence using `interface_registry_has` first.
+	 * @warning Retrieving interface which is not in registry is UB.  Query its existence using `interface_registry_count` first.
 	 *
 	 * @code{.cpp}
 	 * auto render = static_cast<loaf_render_i *>(kernel->interface_registry_first(LOAF_RENDER_INTERFACE_ID));
@@ -60,16 +64,15 @@ struct loaf_kernel_i
 	void * (*interface_registry_next)(const char * id, void * previous);
 
 	/**
-	 * @brief Check if the registry contains an interface with the provided id
+	 * @brief Check how many interface implementations are registered under `id`
 	 *
 	 * @param id Name of the interface to query
 	 *
-	 * @return true  The registry contains an entry under `id`
-	 * @return false The registry does not contain an entry under `id`
+	 * @return uint16_t Number of interfaces registered under `id`
 	 *
 	 * @code{.cpp}
 	 * bool render_exists = kernel->interface_registry_has(LOAF_RENDER_INTERFACE_ID);
 	 * @endcode
 	 */
-	bool interface_registry_has(const char * id);
+	uint16_t (*interface_registry_count)(const char * id);
 };

@@ -27,6 +27,7 @@ endif ()
 target_sources (${MODULE_NAME}
 PRIVATE
 	"private/main.cpp"
+	"private/interface_registry.cpp"
 	${PLATFORM_SOURCES}
 )
 

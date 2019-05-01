@@ -1,3 +1,15 @@
+/**
+ * @file module_loader.cpp
+ * @author StickyFingies
+ *
+ * @brief 64-bit Windows implementation of the kernel's module loader API
+ *
+ * @version 0.0.1
+ * @date 2019-05-01
+ *
+ * @copyright Copyright (c) 2019
+ */
+
 #include "../module_loader.h"
 
 #include <windows.h>
@@ -46,6 +58,10 @@ const char * module_load_files(const char ** file_paths, uint16_t file_count)
 
 		state.dll_handles.push_back(handle);
 	}
+
+	// No errors :)
+
+	return nullptr;
 }
 
 void module_unload_all()
