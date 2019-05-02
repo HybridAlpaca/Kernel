@@ -50,9 +50,7 @@ Once `kernel` is in your superbuild environment, there's not much left to do bes
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [CMake](https://cmake.org/) - Our build system
 
 ## Contributing
 
