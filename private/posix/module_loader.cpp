@@ -27,13 +27,13 @@ struct module_loader_o
 	std::vector<void *> dll_handles;
 };
 
-static module_loader_o internal{};
-
-const char * module_load_files(const char ** file_paths, uint16_t file_count)
+static const char * module_load_files(module_loader_i * api, const char * const * file_paths, uint16_t file_count)
 {
+	auto & inst = api->inst;
+
 	// Grow list to fit files (optimization)
 
-	internal.dll_handles.reserve(file_count);
+	inst->dll_handles.reserve(file_count);
 
 	// Load all provided modules
 
@@ -56,7 +56,7 @@ const char * module_load_files(const char ** file_paths, uint16_t file_count)
 
 		// Add module to list
 
-		internal.dll_handles.push_back(handle);
+		inst->dll_handles.push_back(handle);
 	}
 
 	// No errors :)
@@ -64,12 +64,34 @@ const char * module_load_files(const char ** file_paths, uint16_t file_count)
 	return nullptr;
 }
 
-void module_unload_all()
+static void module_unload_all(module_loader_i * api)
 {
+	auto & inst = api->inst;
+
 	// Close every loaded module
 
-	for (const auto & handle : internal.dll_handles)
+	for (const auto & handle : inst->dll_handles)
 	{
 		dlclose(handle);
 	}
+}
+
+module_loader_i * create_default_module_loader()
+{
+	auto inst = new module_loader_o{};
+
+	auto module_loader = new module_loader_i
+	{
+		inst,
+		module_load_files,
+		module_unload_all
+	};
+
+	return module_loader;
+}
+
+void destroy_default_module_loader(module_loader_i * module_loader)
+{
+	delete module_loader->inst;
+	delete module_loader;
 }

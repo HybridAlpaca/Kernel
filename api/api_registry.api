@@ -1,0 +1,12 @@
+version 1.0
+
+interface api_registry
+{
+	fn add_implementation(id: string, interface: any) -> nil;
+
+	fn first_implementation(id: string) -> any;
+
+	fn next_implementation(id: string, previous: any) -> any;
+
+	fn implementation_count(id: string) -> u16;
+};
